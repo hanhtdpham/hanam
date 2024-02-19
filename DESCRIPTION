@@ -1,0 +1,11 @@
+Package: hanam
+Type: Package
+Title: Homophily adjusted network autocorrelation models for cross-sectional data
+Version: 0.1.0
+Author: Hanh T.D. Pham
+Maintainer: Hanh T.D. Pham <phamhanh.htp@gmail.com>
+Description: Fit homophily-adjusted network autocorrelation models for cross-sectional data
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
