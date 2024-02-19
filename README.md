@@ -10,6 +10,7 @@ devtools::install_github('hanhtdpham/hanam')
 
 ## Example fitting HANE and HAND models to peer influence data
 
+``` r
 library(igraph)
 library(tidygraph)
 library(ggraph)
@@ -133,3 +134,4 @@ ndmMLEFit <- lnam(y = y, x = X, W2= A)
 round(cbind(HAND    = handFit$coefs$estimates[c(1:4,8)], 
             ndmBayes= ndmBayes$coefs$estimates,
             ndmMLE  = c(ndmMLEFit$beta, ndmMLEFit$rho2)), 2)
+```
