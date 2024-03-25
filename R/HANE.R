@@ -36,6 +36,7 @@
 #' @import truncnorm
 #' @import mvtnorm
 #' @import Matrix
+#' @import numDeriv
 #' @export
 #'
 #'
