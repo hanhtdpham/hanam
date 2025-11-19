@@ -71,8 +71,8 @@ HANE <- function(y, X, A, Usample,
   D <- dim(Usample)[3]
 
   # Check if A is a row normalized matrix
-  if(! all( rowSums(A) == 1 | rowSums(A) == 0 ) ) {
-    stop("Error: A is not a row normalized adjacency matrix.")
+  if(!all( near( rowSums(A), 1) | near(rowSums(A), 0) ) ) {
+    stop('Error: A is not a row normalized adjacency matrix.')
   }
 
   # Check if U is an array
