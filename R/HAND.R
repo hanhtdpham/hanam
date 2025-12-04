@@ -18,7 +18,8 @@
 #' @param sd_rho a numeric value for the variance of the truncated normal prior on \eqn{\rho}.
 #' @param seed random seed used in \code{\link{optim}}.
 #' @param init_vec an initialization vector for \eqn{(\beta, \gamma,} \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}, \eqn{\rho)} in \code{\link{optim}}. If not provided, the initial values are estimated using the two-stage least squares (TSLS) estimator proposed by Kelejian & Prucha (1998).
-#' @param aa a numeric value corresponds to the significance level used to report the credible intervals of the parameter estimates.
+#' @param CI_level The posterior probability to be contained in the credible 
+#' interval.
 #' @param verbose a logical value indicating whether to print steps of the algorithm.
 #' @param Usample.maxiter a integer value indicating the maximum iteration used in approximating Usample with a matrix normal distribution.
 #' @param Usample.eps a numeric value indicating the precision used in approximating Usample with a matrix normal distribution.
@@ -60,11 +61,12 @@ HAND <- function(y, X, A, Usample,
                  sd_rho = 0.7,
                  seed = 1,
                  init_vec=NULL,
-                 aa = 0.05,
+                 CI_level = 0.95,
                  verbose = F,
                  Usample.maxiter = 100,
                  Usample.eps = 1e-8){
   # Set up
+  aa = 1.0 - CI_level
   n <- length(y)
   p <- ncol(X)
   nUsamp <- dim(Usample)[1]
@@ -143,7 +145,8 @@ HAND <- function(y, X, A, Usample,
               s2_se       = se[p+D+1],
               covar       = covar,
               convergence = HAND_result$convergence,
-              logLik      = logLik)
+              logLik      = logLik,
+              CI_level    = CI_level)
   class(ret) <- "HAND"
   return(ret)
 }
@@ -193,7 +196,10 @@ gradlPostHAND <- function(theta, y, X, A,
   GradRho   <- -0.5*sum(diag( Sinv%*%Srho )) + 0.5*muSinv%*%tcrossprod(Srho, muSinv) -
     (rho - mu_rho)/(sd_rho^2)
 
-  out <- c(GradBeta, GradGamma, GradSigma, GradRho)
+  out <- c(drop(GradBeta),
+           drop(GradGamma),
+           drop(GradSigma),
+           drop(GradRho))
   return(unlist(out))
 }
 
@@ -238,7 +244,7 @@ lnam2sls_disturbance = function(y,X,A,optim.init=NULL, seed=NULL){
     X1 = X
   }
   AX = A%*%X1
-  HH = model.matrix(~X1+AX+A%*%AX)
+  HH = model.matrix(~as.matrix(X1)+as.matrix(AX)+as.matrix(A%*%AX))
   PP = tcrossprod(HH%*%chol2inv(chol(crossprod(HH))),HH)
   ZHat = PP%*%ZZ
   ZtZInv= qr.solve(crossprod(ZHat))
