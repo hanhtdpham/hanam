@@ -20,7 +20,7 @@ HANE(
   sd_rho = 0.7,
   seed = 1,
   init_vec = NULL,
-  aa = 0.05,
+  CI_level = 0.95,
   verbose = F,
   Usample.maxiter = 100,
   Usample.eps = 1e-08
@@ -57,7 +57,8 @@ HANE(
 
 \item{init_vec}{an initialization vector for \eqn{(\beta, \gamma,} \ifelse{html}{\out{&sigma;<sup>2</sup>}}{\eqn{\sigma^2}}, \eqn{\rho)} in \code{\link{optim}}. If not provided, the initial values are estimated using the two-stage least squares (TSLS) estimator proposed by Kelejian & Prucha (1998).}
 
-\item{aa}{a numeric value corresponds to the significance level used to report the credible intervals of the parameter estimates.}
+\item{CI_level}{The posterior probability to be contained in the credible 
+interval.}
 
 \item{verbose}{a logical value indicating whether to print steps of the algorithm.}
 
